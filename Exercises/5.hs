@@ -53,13 +53,13 @@ everyThird' = [c | (b, c) <- zip (cycle [False, False, True]) cs, b]
 
 -- 9
 square :: Int -> Bool
+square 0 = True
 square n = n `elem` take n squares
     where
         squares = [x ^ 2 | x <- [1..]]
 
-
 square' :: Int -> Bool
-square' n = floor(sqrt (fromIntegral n)) == floor(sqrt (fromIntegral n))
+square' n = floor(sqrt (fromIntegral n)) == ceiling (sqrt (fromIntegral n))
 -- Maybe inacurate?
 
 -- 10 --!
@@ -72,9 +72,9 @@ students :: [String]
 students =
     [
         code |
-        (courseName, students) <- courses,
-        courseName == "Functional Languages",
-        (_, _, code) <- students
+        (courseName, students) <- courses, -- loop externo
+        courseName == "Functional Languages", -- condição dentro do loop externo fora do interno
+        (_, _, code) <- students -- loop interno
     ]
 -- Warning! Nested for loop!
 
@@ -103,5 +103,5 @@ decompress' xs =
     [
         c | 
         (n, c) <- xs, -- "outer for-loop"
-        i <- [1..n] -- "inner for-loop"
+        _ <- [1..n] -- "inner for-loop"
     ]
