@@ -1,3 +1,4 @@
+import Language.Haskell.TH (safe)
 -- 1
 fact :: Integer -> Integer
 fact n 
@@ -24,7 +25,7 @@ fibAux 0 = (0, 0)
 fibAux 1 = (0, 1)
 fibAux n = (y, x + y)
     where
-        (x, y) = fibAux (n - 1)
+        (x, y) = fibAux (n - 1) -- (x = prevPrev, y = prev)
 
 fib' :: Integer -> Integer
 fib' n = snd (fibAux n)
@@ -69,3 +70,20 @@ everySecond (x:y:xs) = y : everySecond xs
 everySecond _ = ""
 
 -- 10
+elem' :: Eq a => a -> [a] -> Bool
+elem' _ [] = False
+elem' e (x:xs) = e == x || elem' e xs
+
+-- 11
+value :: Int -> [(Int, String)] -> String
+value _ [] = error "Key not found"
+value x ((y, s):ys) 
+    | x == y = s
+    | otherwise = value x ys
+
+-- 12
+value' :: Int -> String -> [(Int, String)] -> String
+value' _ d [] = d
+value' x _ ((y, s):ys)
+    | x == y = s
+    | otherwise = value x ys
