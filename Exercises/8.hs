@@ -94,3 +94,6 @@ repeat' e  = e : repeat' e
 -- So another cool definition of the Fibonacci function:
 fib :: [Integer]
 fib = 1 : 1 : [x + y | (x, y) <- zip fib (tail fib)]
+
+-- > take 20 fib
+--   [1,1,2,3,5,8,13,21,34,55,89,144,233,377,610,987,1597,2584,4181,6765]
