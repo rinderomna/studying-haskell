@@ -1,4 +1,3 @@
-import Distribution.Simple.Utils (xargs)
 {-
 Homework 3 - March 2024
 Neptun Code: OPXZ1E
