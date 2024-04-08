@@ -6,6 +6,9 @@
 
 -- 2 -- [TODO]
 
+foo :: Int -> (Int -> Int)
+foo x y = x + y
+
 -- 3
 xor :: Bool -> Bool -> Bool
 xor False y = y

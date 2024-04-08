@@ -6,10 +6,19 @@ Teams: Xie Zong Pu
 
 Consultation: Thursday 14:00-15:00
 -}
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Redundant lambda" #-}
 
+y :: Int
+y = 2
+
+x :: Integer
 x = 1 + 1
 
+dobrar :: Num a => a -> a
 dobrar x = x + x
+
+dobrar2 :: Integer -> Integer
 dobrar2 = \x -> x + x
 
 inc x = x + 1

@@ -70,11 +70,36 @@ reverse' :: [a] -> [a]
 reverse' [] = []
 reverse' (x:xs) = append (reverse' xs) [x]
 
--- 8 
+-- 8 (bonus)
+-- quicksort [] == []
+-- quicksort [42] == [42]
+-- quicksort [2, 1] == [1, 2]
+-- quicksort [7,1,5,9,0,3,2,5,4] == [0,1,2,3,4,5,5,7,9]
+
+-- -- One possible implementation:
+-- quicksort :: Ord a => [a] -> [a]
+-- quicksort [] = []
+-- quicksort [x] = [x]
+-- quicksort (x:xs) = append smaller (x : larger)
+--   where
+--     smaller = quicksort [y | y <- xs, y <= x]
+--     larger  = quicksort [y | y <- xs, y > x]
+
+
+-- Optimized implementation:
+quicksplit :: Ord a => a -> [a] -> ([a], [a])
+quicksplit _ [] = ([], [])
+quicksplit pivot (x:xs)
+    | x <= pivot = (x : smaller, larger)
+    | otherwise = (smaller, x : larger)
+  where
+    (smaller, larger) = quicksplit pivot xs
+
 quicksort :: Ord a => [a] -> [a]
 quicksort [] = []
 quicksort [x] = [x]
-quicksort (x:xs) = append smaller (x : larger)
+quicksort (x:xs) = smallerSorted ++ (x : largerSorted)
   where
-    smaller = quicksort [y | y <- xs, y <= x]
-    larger  = quicksort [y | y <- xs, y > x]
+    (smaller, larger) = quicksplit x xs
+    smallerSorted = quicksort smaller
+    largerSorted = quicksort larger
