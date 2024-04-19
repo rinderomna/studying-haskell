@@ -1,3 +1,7 @@
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Use any" #-}
+import Data.Char
+
 -- 1
 -- map' (\n -> n + 2) [] == []
 -- map' (\n -> n + 2) [2,3,4] == [4,5,6]
@@ -29,6 +33,8 @@ filter'' f (x:xs)
 -- upperToLower "" == ""
 -- upperToLower "Hello World!" == "hw"
 -- upperToLower "haSKell" == "sk"
+
+{-
 upperToLower :: String -> String
 upperToLower s = map' (\x -> toEnum (fromEnum x - diff)) upperOnly
     where
@@ -44,6 +50,11 @@ upperToLower' :: String -> String
 upperToLower' s = [toEnum (fromEnum e - diff) | e <- s, e `elem` ['A'..'Z']]
     where
         diff = fromEnum 'A' - fromEnum 'a'
+-}
+
+upperToLower :: String -> String
+upperToLower = map toLower . filter isUpper
+
 -- 4
 -- all' (\n -> n > 0) []
 -- all' (\n -> n > 0) [1,2,9,6]
@@ -52,6 +63,9 @@ upperToLower' s = [toEnum (fromEnum e - diff) | e <- s, e `elem` ['A'..'Z']]
 all' :: (a -> Bool) -> [a] -> Bool
 all' _ [] = True
 all' f (x:xs) = f x && all' f xs
+
+all'' :: (a -> Bool) -> [a] -> Bool
+all'' f xs = null (filter (not . f) xs)
 
 -- 5
 -- not (any' (\n -> n == 2) [])
@@ -66,7 +80,7 @@ any' f (x:xs) = f x || any' f xs
 -- not (hasLongLine "first\nsecond\nthird line")
 -- hasLongLine "first\none fat line\nthird line"
 hasLongLine :: String -> Bool
-hasLongLine = any' (>= 3). map (length . words) . lines
+hasLongLine = any' (>= 3) . map (length . words) . lines
 
 hasLongLine' :: String -> Bool
 hasLongLine' s = any' (\x -> length x >= 3) [words l | l <- lines s]
@@ -78,14 +92,19 @@ hasLongLine' s = any' (\x -> length x >= 3) [words l | l <- lines s]
 -- elem' True [False, False, True]
 -- not (elem' True [False, False, False])
 elem' :: Eq a => a -> [a] -> Bool
-elem' e xs = any' (`elem` xs) xs
+elem' e = any' (== e)
 
 -- 8
 -- hasAny "abc" "I like Haskell"
 -- hasAny [5,9] [4, 3, 2, 0, 9]
 -- not (hasAny ["haskell", "python"] ["c", "java"])
 hasAny :: Eq a => [a] -> [a] -> Bool
-hasAny ls xs = any' id (map (`elem'` xs) ls)
+-- point-free (pointless):
+hasAny = any . flip elem
+
+hasAny' :: Eq a => [a] -> [a] -> Bool
+hasAny' xs = any' (`elem'` xs)
+
 --hasAny ls xs = any' (uncurry (==)) [(x, y) | x <-ls, y <- xs]
 
 -- 9
@@ -119,3 +138,13 @@ dropWord :: String -> String
 dropWord = dropWhile' (/= ' ')
 
 -- 12
+-- doesUserExist "admin" users
+-- doesUserExist "finn" users
+-- not (doesUserExist "darth_vader" users)
+users :: [(String, String)]
+users = [ ("mrbean", "4321"),
+          ("admin", "s3cr3t"),
+          ("finn", "algebraic")]
+
+doesUserExist :: String -> [(String, String)] -> Bool
+doesUserExist u users = (not . null) [username | (username, _) <- users, username == u]
