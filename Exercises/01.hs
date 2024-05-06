@@ -28,7 +28,7 @@ pT a b c =
     (a ^ 2 + c ^ 2 == b ^ 2) ||
     (b ^ 2 + c ^ 2 == a ^ 2) 
 
-y :: Integer
-y = 2
+y' :: Integer
+y' = 2
 
 -- [TODO]: do the whole first list again

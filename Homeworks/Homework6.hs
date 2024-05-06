@@ -46,9 +46,16 @@ dropWhileEnd' f xs = take (length xs - n) xs
 -- nestedMap (== 'l') ["he", "llo"] == [[False, False], [True, True, False]]
 -- nestedMap (+ 1) [] == []
 -- nestedMap (+ 1) [[], [], []] == [[], [], []]
+nestedMap' :: (a -> b) -> [[a]] -> [[b]]
+nestedMap' _ [] = []
+nestedMap' f (xs:xss) = map f xs : nestedMap f xss
+
+-- Corrected:
 nestedMap :: (a -> b) -> [[a]] -> [[b]]
-nestedMap _ [] = []    
-nestedMap f (xs:xss) = map f xs : nestedMap f xss
+--nestedMap f xss = map (\xs -> map f xs) xss
+--nestedMap f xss = map (map f) xss
+--nestedMap f = map (map f)
+nestedMap = map . map
 
 -- 5
 -- zipWith' (+) [1, 2, 3] [20, 30, 40] == [21, 32, 43]
