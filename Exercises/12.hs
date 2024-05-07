@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Use catMaybes" #-}
 import Data.Maybe (listToMaybe)
 -- 1
 data Privilege = Unprivileged | Admin
@@ -73,3 +75,15 @@ delete username _ db = db
 -- 9
 users :: Database -> [Username]
 users db = [username | (username, _, _) <- db]
+
+data Maybe' a = Just' a | Nothing'
+instance Eq a => Eq (Maybe' a) where
+    Nothing' == Nothing' = True
+    Just' x == Just' y   = x == y
+    _ == _               = False
+
+getUnprivilegedUsers :: Database -> [Username]
+getUnprivilegedUsers db = [username | (username, _, Unprivileged) <- db]
+
+catMaybes' :: [Maybe a] -> [a]
+catMaybes' xs = [x | Just x <- xs]
